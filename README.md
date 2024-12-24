@@ -1,8 +1,8 @@
 # Lightweight-Track-Builder
 This project is based on Templot5. 
-
-## 3D Generator Logic
 ---
+## 3D Generator Logic
+```
 flowchart TD
     A[User Input] -->|Track Parameters| B[Input Validation]
     B -->|Check for Errors| C{Valid Input?}
@@ -13,8 +13,7 @@ flowchart TD
     G -->|Convert to STL| H[STL Export]
     H -->|Save File| I[Provide Download Link]
     I -->|User Access| J[Download STL File]
----
----
+
     subgraph Flask Workflow
         B --> C --> D --> F
     end
@@ -26,8 +25,8 @@ flowchart TD
     subgraph Final Output
         I --> J
     end
+```
 ---
-
 ## Core App Directory Structure
 
 ```plaintext
