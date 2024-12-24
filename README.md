@@ -102,7 +102,7 @@ flowchart TD
 ```
 project/
 │
-├── app/
+├── track_app/
 │   ├── __init__.py    # Application initialization
 │   ├── models.py      # Database models
 │   ├── routes.py      # Application routes
