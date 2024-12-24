@@ -29,24 +29,26 @@ flowchart TD
 ---
 ## Core App Directory Structure
 
-```plaintext
-core/
-├── __init__.py
-├── admin.py
-├── apps.py
-├── migrations/
-│   └── __init__.py
-├── models.py          # Data models for storing core parameters
-├── tests.py
-├── views.py           # For handling API views or rendering templates
-├── urls.py            # For defining app-specific routes
-├── logic/             # Core logic directory
-│   ├── __init__.py
-│   ├── geometry.py    # Placeholder for track geometry calculations
-│   ├── exporter.py    # Placeholder for CadQuery STL generation
-│   └── utilities.py   # Placeholder for shared utility functionss
 ```
+project/
+│
+├── app/
+│   ├── __init__.py    # Application initialization
+│   ├── models.py      # Database models
+│   ├── routes.py      # Application routes
+│   ├── geometry.py    # Track geometry logic
+│   ├── templates/     # HTML templates (if needed)
+│   ├── static/        # Static files (if needed)
+│
+├── migrations/        # Database migration files
+├── tests/             # Unit tests
+├── Dockerfile         # Docker container configuration
+├── docker-compose.yml # Docker Compose setup
+├── requirements.txt   # Python dependencies
+└── README.md          # Project documentation
 
+```
+---
 ## TODO List
 
 ### 1. Project Setup
