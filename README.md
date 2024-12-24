@@ -1,7 +1,3 @@
-# Lightweight-Track-Builder
-This project is based on Templot5, thank you Martin Wynne.
-
----
 # PROJECT: Lightweight Track Builder (Rewrite of Templot by Martin Wynne)
 
 ## GOAL
