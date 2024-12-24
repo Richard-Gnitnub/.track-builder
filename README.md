@@ -2,40 +2,76 @@
 This project is based on Templot5, thank you Martin Wynne.
 
 ---
-##Project Charter
+# PROJECT: Lightweight Track Builder (Rewrite of Templot by Martin Wynne)
 
-MVP Outline:
-Framework: Flask.
-Deployment: Docker Desktop for local testing and validation.
-Track Design Standards: REA bullhead rail.
-Core Features:
-Admin Panel: Built using the Flask-Admin extension for managing track configurations and data.
-Straight Track Generator: Generate a straight piece of track to the user’s specified length.
-Modular Components:
-Timbers and Chairs: Base components for track generation.
-Rails: Placeholder logic, added manually post-MVP.
-Planned Enhancements (Post-MVP):
-Support for curves and turnouts.
-3D model refinement for snap-fit designs.
-Advanced track configuration options.
-Development Plan:
-Setup:
-Use Flask for the application logic.
-Integrate Flask-Admin for the admin panel.
-Set up SQLite for configuration storage.
-Docker Integration:
-Create a Dockerfile and Docker Compose setup to containerize the application for testing on Docker Desktop.
-Features:
-User Input: Accept track length from users via a simple form or API endpoint.
-Geometry Processing: Calculate the straight track layout based on user input.
-STL Generation: Use CadQuery to generate 3D models of the track.
-File Output: Provide a downloadable STL file for the user.
-Testing:
-Ensure the admin panel functions as expected for data management.
-Validate the track generation logic and STL export.
-Deployment (Local):
-Deploy and test on Docker Desktop.
-Ensure the application is stable and logic works before future iterations.
+## GOAL
+Create a minimal Python-based engine to generate accurate model railway track, focusing on straight track and simple turnouts for 3D printing (STL export). The project will adhere to bullhead rail standards based on REA specifications, with chairs and timbers included. This MVP will serve as the foundation for a more comprehensive track design tool.
+
+---
+
+## KEY INSIGHTS
+- Legacy `dxf_unit.pas` (Pascal) code is pivotal, containing both 2D DXF and 3D STL export logic.
+- The codebase is monolithic, heavily reliant on global variables for rail/sleeper geometry, tolerances, and more.
+- Decades of incremental updates have resulted in intertwined 2D and 3D logic under "DXF" routines.
+
+---
+
+## MVP PLAN
+- Build the MVP using Flask as the framework, replacing Django for a lightweight approach.
+- Create an admin panel using the Flask-Admin extension to manage track configurations and parameters.
+- Focus on bullhead rail based on REA standards.
+- Include chairs as part of the 3D model, as the rail sits within the chairs.
+- Design track as a combination of:
+  - **Timbers:** Base structure for the track.
+  - **Chairs:** Components to hold the rail.
+  - **Rail:** Added manually by the user post-3D printing.
+- Implement functionality to generate a straight piece of track to the user’s specified length.
+- Use Python CAD libraries (e.g., CadQuery) for STL file generation.
+- Introduce a SQLite database to remove hardcoded data, enabling flexible storage of track parameters and configurations.
+
+---
+
+## WORKING ENVIRONMENT REQUIREMENTS
+- The project will be developed using VS Code on a Windows laptop.
+- GitHub Desktop will be used for version management.
+- Instructions will provide explicit steps, including details on where files should be placed within the directory structure to ensure clarity and avoid ambiguity.
+
+---
+
+## REFACTORING OUTLINE
+- **Separation of Concerns:** Replace global variables with structured classes (e.g., `TrackSettings`).
+- **Database Integration:** Replace hardcoded values with dynamic retrieval from the SQLite database for better configurability and scalability.
+- **Geometry/Math Decoupling:** Keep core logic in a separate module, independent of UI/CLI.
+- **Native 3D Export:** Leverage Python CAD libraries to directly generate STL geometry.
+- **Track Element Modularity:** Ensure timbers, chairs, and rail are modularly designed for reusability and scalability.
+
+---
+
+## ATTRIBUTION
+To comply with GNU GPLv3, include prominent attribution in the code comments and documentation to Martin Wynne for his original work on Templot.
+
+---
+
+## FUTURE ENHANCEMENTS
+- Add more track types, turnout angles, and advanced details (e.g., snap-fit designs) once the MVP is stable.
+- Expand REA-based models with additional variations and regional standards.
+- Reintroduce specialized features like chaired track and snap-fit designs after validating the core engine.
+
+---
+
+## END STATE
+A Flask-based, modular, and maintainable track design engine that generates STL files for REA-standard bullhead rail track, including chairs and timbers, supported by a SQLite database for flexible data management. The rail itself is intended to be added manually by the user after 3D printing.
+
+---
+
+## REFERENCE
+[GitHub Link](https://github.com/Richard-Gnitnub/Templot5/blob/main/dxf_unit.pas)
+
+---
+
+## NOTES
+- Develop using Python 3.12.3 (latest version as of October 2023).
+- Attribution to Martin Wynne is essential to comply with GNU GPLv3.
 
 ---
 ## Application Logic
@@ -86,84 +122,90 @@ project/
 
 ```
 ---
-[## TODO List
+# TODO List
 
-### 1. Project Setup
-- [ ] Set up the project directory structure for a Django application.
+## 1. Project Setup
+- [ ] Set up the project directory structure for a Flask application.
 - [ ] Create a Python virtual environment (`venv` or `conda`) for isolated development.
-- [ ] Install Django and essential dependencies:
-  - `django`
-  - `djangorestframework` (for future API support)
+- [ ] Install Flask and essential dependencies:
+  - `flask`
+  - `flask-admin` (for the admin panel)
   - `cadquery` (for geometry generation)
   - `numpy`
+  - `pytest` (for testing)
 - [ ] Initialise a Git repository and push to GitHub using the desktop app.
 - [ ] Add a `.gitignore` file (e.g., ignore `__pycache__`, `.DS_Store`, virtual environments, STL files, etc.).
-- [ ] Create a Django project and a core app for managing track components (e.g., `trackbuilder`).
-- [ ] Configure static and media file handling for storing and serving STL files.
-- [ ] Deploy to Digital Ocean
+- [ ] Create a basic Flask project structure:
+  - `app/` for core logic.
+  - `templates/` and `static/` for web interface assets (if needed).
+- [ ] Set up Docker for local deployment:
+  - Create a `Dockerfile` to containerize the Flask application.
+  - Create a `docker-compose.yml` file to manage dependencies and services.
+    
+---
 
-### 2. Core Functionality
+## 2. Core Functionality
 
-#### a. Database Models
-- [ ] Define models for chairs, rails, turnouts, and layouts in `models.py`:
-  - Chairs: Include dimensions, types, and materials.
-  - Rails: Define profiles, types, and tolerances.
-  - Turnouts: Define angle, radius, and type.
-  - Layouts: Store metadata and relationships between components.
-- [ ] Set up relationships between layouts and their components (e.g., many-to-many relationships).
-- [ ] Create migrations and populate the database with example data.
+### a. Database Models
+- [ ] Define models for track components in `models.py`:
+  - Straight Track: Include length and other parameters.
+  - Chairs: Include dimensions and types (minimal for MVP).
+  - Rails: Placeholder for future iterations.
+- [ ] Use Flask-SQLAlchemy to implement the database.
+- [ ] Create migrations and populate the database with example data using Flask-Migrate.
 
-#### b. Geometry and STL Export
-- [ ] Implement functions to generate geometry for chairs, rails, and turnouts.
-- [ ] Integrate geometry generation with Django models.
-- [ ] Implement STL export logic using `cadquery`.
-- [ ] Add functionality to trigger STL exports from the web interface (e.g., a "Generate STL" button).
+### b. Geometry and STL Export
+- [ ] Implement a function to generate geometry for straight tracks.
+- [ ] Integrate geometry generation with Flask routes.
+- [ ] Use CadQuery to generate STL files based on user input.
 - [ ] Validate the integrity of exported STL files using an STL viewer (e.g., MeshLab).
-- [ ] Implement geometry scaling based on user-defined input.
+- [ ] Provide a downloadable STL file through the Flask app.
 
-#### c. Web Interface
-- [ ] Use Django’s admin interface to manage database entries (e.g., chairs, rails, turnouts).
-- [ ] Create a user-friendly web interface for:
-  - Viewing and managing track layouts.
-  - Adding, editing, and deleting components (e.g., chairs, rails).
-  - Configuring track settings (e.g., scale, tolerances).
-  - Generating and downloading STL files.
-- [ ] Ensure the interface is responsive and accessible for desktop and mobile users.
+### c. Admin Panel
+- [ ] Use Flask-Admin to create an admin interface for managing:
+  - Database entries for chairs, rails, and straight tracks.
+  - Configuration settings.
+- [ ] Ensure the admin panel allows CRUD operations on database models.
 
-### 3. REST API (Optional for Future Use)
-- [ ] Set up **Django REST Framework** (DRF) to expose APIs for:
-  - Fetching chair, rail, and turnout data.
-  - Submitting custom layouts for processing.
-  - Downloading generated STL files programmatically.
-- [ ] Create an example API endpoint for:
-  - Submitting a layout: `POST /api/layout/`
-  - Downloading an STL file: `GET /api/layout/<id>/stl/`
-- [ ] Document the API for community use.
+### d. User Interface
+- [ ] Create a simple web interface for:
+  - Submitting track parameters (e.g., length).
+  - Viewing and downloading the generated STL file.
+- [ ] Test for usability and responsiveness.
 
-### 4. Hosting and Deployment
-- [ ] Set up a PostgreSQL database for production (better scalability than SQLite).
-- [ ] Use Django’s settings to handle environment-specific configurations (e.g., `.env` file with `django-environ`).
-- [ ] Configure static and media file hosting for STL files and assets.
-- [ ] Host the application using:
-  - **Heroku** (simple deployment for MVP).
-  - Or **AWS**, **DigitalOcean**, or **Vercel** for more control.
-- [ ] Configure a production-ready web server (e.g., Gunicorn or uWSGI) with Django.
-- [ ] Set up HTTPS using Let’s Encrypt or a similar service.
-- [ ] Automate deployment using CI/CD workflows (e.g., GitHub Actions, GitLab CI).
+---
 
-### 5. Testing
-- [ ] Write unit tests for models, views, and geometry generation functions.
-- [ ] Test STL export functionality with various track layouts.
-- [ ] Test the web interface for usability and bugs using browser-based testing tools (e.g., Selenium).
-- [ ] Perform end-to-end testing to ensure the system works seamlessly.
+## 3. Testing
+- [ ] Write unit tests for models, routes, and geometry generation functions using `pytest`.
+- [ ] Test STL export functionality with various track lengths.
+- [ ] Test the admin panel for proper CRUD operations.
+- [ ] Perform manual testing to validate the complete MVP workflow.
 - [ ] Validate edge cases, such as:
-  - Overlapping or conflicting components in layouts.
-  - Unusual geometry configurations (e.g., very tight radii).
+  - Extremely short or long tracks.
+  - Invalid user inputs.
 
-### 6. Documentation
+---
+
+## 4. Deployment (Local Testing Only)
+- [ ] Deploy the Flask app on Docker Desktop for local testing.
+- [ ] Verify the Docker setup:
+  - Ensure all dependencies are included.
+  - Validate the app runs correctly within the container.
+- [ ] Document the steps for building and running the Docker container.
+
+---
+
+## 5. Documentation
 - [ ] Write a clear **Getting Started** guide for contributors.
 - [ ] Document all database models and their relationships.
-- [ ] Provide usage examples for the web interface.
-- [ ] Create an FAQ or troubleshooting guide for common issues.
-- [ ] Include deployment instructions for hosting the application.
-- [ ] Write a **Contributing** guide to encourage community involvement.](https://chatgpt.com/g/g-p-67672c944cd0819184a850f0365fb16b-templot-simplified/c/676a5abb-58ec-8001-91e9-fdd0d6532b00#:~:text=updated%20deployment%20plan%3A-,TODO%20List,and%20deployment%20on%20a%20cloud%20platform%20(e.g.%2C%20AWS%20or%20DigitalOcean).,-This%20revised%20plan)
+- [ ] Provide usage examples for the admin panel and web interface.
+- [ ] Create a troubleshooting guide for common issues.
+- [ ] Include detailed steps for setting up the Flask app locally and in Docker.
+
+---
+
+## 6. Future Enhancements (Post-MVP)
+- [ ] Add support for curves and turnouts.
+- [ ] Introduce more advanced track configurations and layouts.
+- [ ] Implement a REST API for programmatic access.
+- [ ] Plan for web hosting and deployment on a cloud platform (e.g., AWS or DigitalOcean)
