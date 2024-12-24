@@ -31,6 +31,7 @@ Create a minimal Python-based engine to generate accurate model railway track, f
 - The project will be developed using VS Code on a Windows laptop.
 - GitHub Desktop will be used for version management.
 - Instructions will provide explicit steps, including details on where files should be placed within the directory structure to ensure clarity and avoid ambiguity.
+- CLI will be windows Command Prompt
 
 ---
 
