@@ -1,7 +1,44 @@
 # Lightweight-Track-Builder
-This project is based on Templot5. 
+This project is based on Templot5, thank you Martin Wynne.
+
 ---
-## 3D Generator Logic
+##Project Charter
+
+MVP Outline:
+Framework: Flask.
+Deployment: Docker Desktop for local testing and validation.
+Track Design Standards: REA bullhead rail.
+Core Features:
+Admin Panel: Built using the Flask-Admin extension for managing track configurations and data.
+Straight Track Generator: Generate a straight piece of track to the user’s specified length.
+Modular Components:
+Timbers and Chairs: Base components for track generation.
+Rails: Placeholder logic, added manually post-MVP.
+Planned Enhancements (Post-MVP):
+Support for curves and turnouts.
+3D model refinement for snap-fit designs.
+Advanced track configuration options.
+Development Plan:
+Setup:
+Use Flask for the application logic.
+Integrate Flask-Admin for the admin panel.
+Set up SQLite for configuration storage.
+Docker Integration:
+Create a Dockerfile and Docker Compose setup to containerize the application for testing on Docker Desktop.
+Features:
+User Input: Accept track length from users via a simple form or API endpoint.
+Geometry Processing: Calculate the straight track layout based on user input.
+STL Generation: Use CadQuery to generate 3D models of the track.
+File Output: Provide a downloadable STL file for the user.
+Testing:
+Ensure the admin panel functions as expected for data management.
+Validate the track generation logic and STL export.
+Deployment (Local):
+Deploy and test on Docker Desktop.
+Ensure the application is stable and logic works before future iterations.
+
+---
+## Application Logic
 ```
 flowchart TD
     A[User Input] -->|Track Parameters| B[Input Validation]
@@ -49,7 +86,7 @@ project/
 
 ```
 ---
-## TODO List
+[## TODO List
 
 ### 1. Project Setup
 - [ ] Set up the project directory structure for a Django application.
@@ -66,6 +103,7 @@ project/
 - [ ] Deploy to Digital Ocean
 
 ### 2. Core Functionality
+
 #### a. Database Models
 - [ ] Define models for chairs, rails, turnouts, and layouts in `models.py`:
   - Chairs: Include dimensions, types, and materials.
@@ -128,4 +166,4 @@ project/
 - [ ] Provide usage examples for the web interface.
 - [ ] Create an FAQ or troubleshooting guide for common issues.
 - [ ] Include deployment instructions for hosting the application.
-- [ ] Write a **Contributing** guide to encourage community involvement.
+- [ ] Write a **Contributing** guide to encourage community involvement.](https://chatgpt.com/g/g-p-67672c944cd0819184a850f0365fb16b-templot-simplified/c/676a5abb-58ec-8001-91e9-fdd0d6532b00#:~:text=updated%20deployment%20plan%3A-,TODO%20List,and%20deployment%20on%20a%20cloud%20platform%20(e.g.%2C%20AWS%20or%20DigitalOcean).,-This%20revised%20plan)
